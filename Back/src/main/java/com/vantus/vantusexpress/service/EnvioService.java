@@ -60,4 +60,8 @@ public class EnvioService {
     public void eliminar(Integer id) {
         envioRepository.deleteById(id);
     }
+
+    public List<Envio> obtenerTodos() {
+        return envioRepository.findAll();
+    }
 }

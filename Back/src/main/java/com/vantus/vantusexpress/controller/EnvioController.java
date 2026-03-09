@@ -27,14 +27,23 @@ public class EnvioController {
             return ResponseEntity.notFound().build();
         }
     }
-
+/* 
     @GetMapping
     public ResponseEntity<Envio> obtenerPorFolio(@RequestParam String folio) {
         return envioService.obtenerPorFolio(folio)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+*/
+    @GetMapping
+    public ResponseEntity<?> obtener(@RequestParam(required = false) String folio) {
+        if (folio != null) {
+            return envioService.obtenerPorFolio(folio)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        }
+        return ResponseEntity.ok(envioService.obtenerTodos());
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Envio> obtenerPorId(@PathVariable Integer id) {
         return envioService.obtenerPorId(id)
