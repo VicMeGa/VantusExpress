@@ -1,8 +1,7 @@
-import Cabeza from "../../Componentes/Cabeza";
-import Navbar from "../../Componentes/Navbar";
 import Envios from "../envios/Envios";
-import Destinatarios from "../Destinatarios/Destinatarios";
-import Clientes from "../Clientes/Clientes";
+
+import Sidebar from "../../Componentes/Sidebar";
+import { Outlet, Navigate } from 'react-router-dom';
 
 function  Inicio (){
     return (
@@ -10,7 +9,8 @@ function  Inicio (){
      {/*   <Cabeza />
         <Navbar />*/}
         <div className="centralizacion">
-            <Clientes />
+        <Sidebar />
+            <Outlet />
         </div>
         </>
     );

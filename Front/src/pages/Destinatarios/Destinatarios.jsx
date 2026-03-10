@@ -107,7 +107,7 @@ export default function Destinatarios() {
             <div className="envios-header">
             <div className="envios-header__inner">
                 <div className="envios-header__brand">
-                <div className="envios-header__logo">📦</div>
+                <div className=""><img className="logo" src={"/vantus.png"}  alt="Logo de Vantus" /></div>
                 <span className="envios-header__name">VantusExpress</span>
                 <span className="envios-header__sep">/</span>
                 <span className="envios-header__section">Destinatarios</span>

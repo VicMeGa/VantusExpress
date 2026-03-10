@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Modal from "./Componentes/Modal";
-import Field from "./Componentes/Field";
-import Badge from "./Componentes/Badge";
+import Modal from "../../Componentes/Modal";
+import Field from "../../Componentes/Field";
+import Badge from "../../Componentes/Badge";
 //import "./Envios.css";
 
 const API = "http://localhost:8080";
@@ -111,6 +111,7 @@ export default function Envios() {
         <div className="envios-header">
           <div className="envios-header__inner">
             <div className="envios-header__brand">
+              <div className=""><img className="logo" src={"/vantus.png"}  alt="Logo de Vantus" /></div>
               <span className="envios-header__name">VantusExpress</span>
               <span className="envios-header__sep">/</span>
               <span className="envios-header__section">Envíos</span>
