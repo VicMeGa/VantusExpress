@@ -4,7 +4,7 @@ import Field from "../../Componentes/Field";
 import Badge from "../../Componentes/Badge";
 //import "./Envios.css";
 
-const API = "http://localhost:8080";
+const API = import.meta.env.VITE_BACKEND_URL;
 
 const ESTADOS = ["registrado", "en tránsito", "entregado", "cancelado"];
 

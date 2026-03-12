@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const API = "http://localhost:8080";
+const API = import.meta.env.VITE_BACKEND_URL;
+
 
 function Modal({ title, onClose, children }) {
   return (
@@ -32,6 +33,7 @@ export default function Clientes() {
   const [telefono, setTelefono] = useState("");
   const [buscando, setBuscando] = useState(false);
   const [buscado, setBuscado] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [modalCrear, setModalCrear] = useState(false);
   const [modalEditar, setModalEditar] = useState(null);
@@ -44,14 +46,29 @@ export default function Clientes() {
   const [formEditar, setFormEditar] = useState({ nombre: "", telefono: "", direccion: "" });
   const [editando, setEditando] = useState(false);
 
+  // Reemplaza el useState de buscado y la función buscarPorTelefono
+  //const [buscado, setBuscado] = useState(false); // ya no necesitas esto
+
+  // Carga todos al entrar
+  useEffect(() => { cargarTodos(); }, []);
+
+  async function cargarTodos() {
+    setLoading(true); setError(null);
+    try {
+      const res = await fetch(`${API}/clientes`);
+      if (!res.ok) throw new Error("Error al cargar clientes");
+      setClientes(await res.json());
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  }
+
   async function buscarPorTelefono() {
-    if (!telefono.trim()) return;
+    if (!telefono.trim()) return cargarTodos();  // si limpia, regresa a todos
     setBuscando(true); setError(null);
     try {
       const res = await fetch(`${API}/clientes?telefono=${telefono.trim()}`);
-      if (!res.ok) throw new Error("Error al buscar clientes");
+      if (!res.ok) throw new Error("Error al buscar");
       setClientes(await res.json());
-      setBuscado(true);
     } catch (e) { setError(e.message); }
     finally { setBuscando(false); }
   }
@@ -96,7 +113,7 @@ export default function Clientes() {
     setModalEditar(cliente);
   }
 
-  const limpiarBusqueda = () => { setTelefono(""); setClientes([]); setBuscado(false); setError(null); };
+  const limpiarBusqueda = () => { setTelefono(""); cargarTodos(); };
 
   const formatFecha = (f) => f ? new Date(f).toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" }) : "—";
 
@@ -168,12 +185,10 @@ export default function Clientes() {
 
           {error ? (
             <div className="envios-table__error">{error}</div>
-          ) : !buscado ? (
-            <div className="envios-table__empty">Ingresa un teléfono para buscar clientes.</div>
-          ) : buscando ? (
+          ) : loading ? (
             <div className="envios-table__loading">Cargando...</div>
           ) : clientes.length === 0 ? (
-            <div className="envios-table__empty">No se encontró ningún cliente con ese teléfono.</div>
+            <div className="envios-table__empty">No hay clientes registrados.</div>
           ) : (
             clientes.map(cliente => (
               <div key={cliente.id} className="clientes-table__row envios-table__row">

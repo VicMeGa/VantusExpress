@@ -19,6 +19,10 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
+    public List<Cliente> obtenerTodos() {
+        return clienteRepository.findAll();
+    }
+    
     public List<Cliente> obtenerPorTelefono(String telefono) {
         return clienteRepository.findByTelefono(telefono);
     }

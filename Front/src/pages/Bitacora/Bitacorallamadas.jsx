@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "http://localhost:8080";
+const API = import.meta.env.VITE_BACKEND_URL;
 
 const resultadoConfig = {
   completado:  { color: "#10b981", bg: "#ecfdf5", border: "#10b98122" },

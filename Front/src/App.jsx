@@ -4,7 +4,8 @@ import Envios from './pages/envios/Envios';
 import Clientes from './pages/Clientes/Clientes';
 import Destinatarios from './pages/Destinatarios/Destinatarios';
 import BitacoraLlamadas from './pages/Bitacora/Bitacorallamadas';
-import './styles/App.css'
+import './styles/App.css';
+import Auth from './pages/Login/Auth';
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
     <>
       <BrowserRouter>
       <Routes>
+        <Route path="auth" element={<Auth />} />
         <Route path="/" element={<Inicio />}>
           <Route index element={<Navigate to="envios" replace />} />
           <Route path="envios"        element={<Envios />} />

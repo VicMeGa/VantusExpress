@@ -22,9 +22,17 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.crear(cliente));
     }
 
+    //@GetMapping
+    //public ResponseEntity<List<Cliente>> obtenerPorTelefono(@RequestParam String telefono) {
+    //    return ResponseEntity.ok(clienteService.obtenerPorTelefono(telefono));
+    //}
+
     @GetMapping
-    public ResponseEntity<List<Cliente>> obtenerPorTelefono(@RequestParam String telefono) {
-        return ResponseEntity.ok(clienteService.obtenerPorTelefono(telefono));
+    public ResponseEntity<List<Cliente>> obtener(@RequestParam(required = false) String telefono) {
+        if (telefono != null && !telefono.isBlank()) {
+            return ResponseEntity.ok(clienteService.obtenerPorTelefono(telefono));
+        }
+        return ResponseEntity.ok(clienteService.obtenerTodos());
     }
 
     @GetMapping("/{id}")
