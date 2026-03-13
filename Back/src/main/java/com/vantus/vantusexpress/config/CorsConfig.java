@@ -16,7 +16,8 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173",
                                         "http://localhost:4173",
-                                        "https://express.vantus.site"
+                                        "https://express.vantus.site".
+                                        "https://n8n.vantus.site"
                          )
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*");
