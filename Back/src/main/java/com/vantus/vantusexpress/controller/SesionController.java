@@ -1,5 +1,6 @@
 package com.vantus.vantusexpress.controller;
 
+import com.vantus.vantusexpress.dto.SesionDTO;
 import com.vantus.vantusexpress.entity.Sesion;
 import com.vantus.vantusexpress.service.SesionService;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,9 @@ public class SesionController {
     }
 
     @PostMapping
-    public ResponseEntity<Sesion> crear(@RequestBody Sesion sesion) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(sesionService.crear(sesion));
+    public ResponseEntity<Sesion> crear(@RequestBody SesionDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(sesionService.crear(dto.toEntity()));
     }
 
     @GetMapping("/{callSid}")
@@ -30,9 +32,9 @@ public class SesionController {
 
     @PutMapping("/{callSid}")
     public ResponseEntity<Sesion> actualizar(@PathVariable String callSid,
-                                              @RequestBody Sesion sesion) {
+                                              @RequestBody SesionDTO dto) {
         try {
-            return ResponseEntity.ok(sesionService.actualizar(callSid, sesion));
+            return ResponseEntity.ok(sesionService.actualizar(callSid, dto.toEntity()));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
