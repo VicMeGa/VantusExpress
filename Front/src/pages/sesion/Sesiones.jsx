@@ -205,7 +205,9 @@ export default function Sesiones() {
           ) : (
             sesiones.map(sesion => (
               <div key={sesion.id} className="sesion-table__row envios-table__row">
-                <span className="envios-table__folio">{sesion.callSid}</span>
+                <span className="envios-table__folio" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {sesion.callSid}
+                </span>
                 <span style={{ fontSize: 13, color: "#374151" }}>{sesion.pasoActual || "—"}</span>
                 <span className="envios-table__contenido" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#9ca3af" }}>
                   {sesion.datos ? JSON.stringify(sesion.datos) : "—"}

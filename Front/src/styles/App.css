@@ -550,12 +550,11 @@ body {
 /* ── Sesiones table grid ── */
 .sesion-table__head {
   display: grid;
-  grid-template-columns: 200px 140px 1fr 160px 100px;
+  grid-template-columns: 220px 150px 80px 1fr 100px;
   padding: 10px 20px;
   border-bottom: 1px solid #f3f4f6;
 }
- 
+
 .sesion-table__row {
-  grid-template-columns: 200px 140px 1fr 160px 100px !important;
+  grid-template-columns: 220px 150px 80px 1fr 100px !important;
 }
- 
