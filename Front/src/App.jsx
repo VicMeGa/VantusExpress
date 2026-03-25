@@ -6,6 +6,7 @@ import Destinatarios from './pages/Destinatarios/Destinatarios';
 import BitacoraLlamadas from './pages/Bitacora/Bitacorallamadas';
 import './styles/App.css';
 import Auth from './pages/Login/Auth';
+import Sesiones from './pages/sesion/Sesiones';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="clientes"      element={<Clientes />} />
           <Route path="destinatarios" element={<Destinatarios />} />
           <Route path="bitacora"      element={<BitacoraLlamadas />} />
+          <Route path='sesiones'      element={<Sesiones />} />
         </Route>
       </Routes>
     </BrowserRouter>

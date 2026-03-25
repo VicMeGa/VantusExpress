@@ -1,4 +1,4 @@
-import { Package, Users, MapPin, PhoneCall } from 'lucide-react';
+import { Package, Users, MapPin, PhoneCall, Radio} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ page, setPage }) {
@@ -36,6 +36,14 @@ function Sidebar({ page, setPage }) {
             onClick={() => navigate('/bitacora')}
           >
             <PhoneCall className="sidebar-icon" size={20} />
+          </button>
+        </li>
+        <li>
+          <button
+            className={`sidebar-item ${location.pathname === '/sesiones' ? 'sidebar-item--active' : ''}`}
+            onClick={() => navigate('/sesiones')}
+          >
+            <Radio className="sidebar-icon" size={20} />
           </button>
         </li>
       </ul>

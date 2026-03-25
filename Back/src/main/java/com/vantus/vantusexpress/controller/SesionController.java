@@ -23,13 +23,39 @@ public class SesionController {
                 .body(sesionService.crear(dto.toEntity()));
     }
 
+    //@GetMapping("/{callSid}")
+    //public ResponseEntity<Sesion> obtener(@PathVariable String callSid) {
+    //    return sesionService.obtenerPorCallSid(callSid)
+    //            .map(ResponseEntity::ok)
+    //            .orElse(ResponseEntity.notFound().build());
+    //}
+
+    //@GetMapping
+    //public ResponseEntity<List<Sesion>> obtener(@RequestParam(required = false) String callSid) {
+    //    if (callSid != null && !callSid.isBlank()) {
+    //        return ResponseEntity.ok(SesionService.obtenerPorTelefono(telefono));
+    //    }
+    //    return ResponseEntity.ok(SesionService.obtenerTodos());
+    //}
+
+    @GetMapping
+    public ResponseEntity<?> obtener(@RequestParam(required = false) String callSid) {
+        if (callSid != null) {
+            return sesionRepository.findByCallSid(callSid) // corregir: sesionService
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        }
+        return ResponseEntity.ok(sesionService.obtenerTodos());
+    }
+
+    // elimina el @GetMapping("/{callSid}") anterior y déjalo así
     @GetMapping("/{callSid}")
-    public ResponseEntity<Sesion> obtener(@PathVariable String callSid) {
+    public ResponseEntity<Sesion> obtenerPorCallSid(@PathVariable String callSid) {
         return sesionService.obtenerPorCallSid(callSid)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    
     @PutMapping("/{callSid}")
     public ResponseEntity<Sesion> actualizar(@PathVariable String callSid,
                                               @RequestBody SesionDTO dto) {

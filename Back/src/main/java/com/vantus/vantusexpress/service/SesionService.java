@@ -19,6 +19,10 @@ public class SesionService {
         return sesionRepository.save(sesion);
     }
 
+    public List<Sesion> obtenerTodos() {
+        return sesionRepository.findAll();
+    }
+
     public Optional<Sesion> obtenerPorCallSid(String callSid) {
         return sesionRepository.findByCallSid(callSid);
     }
