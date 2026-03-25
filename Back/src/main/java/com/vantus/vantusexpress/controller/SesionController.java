@@ -39,23 +39,17 @@ public class SesionController {
     //}
 
     @GetMapping
-    public ResponseEntity<?> obtener(@RequestParam(required = false) String callSid) {
-        if (callSid != null) {
-            return sesionRepository.findByCallSid(callSid) // corregir: sesionService
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
-        }
+    public ResponseEntity<?> obtenerTodos() {
         return ResponseEntity.ok(sesionService.obtenerTodos());
     }
 
-    // elimina el @GetMapping("/{callSid}") anterior y déjalo así
     @GetMapping("/{callSid}")
     public ResponseEntity<Sesion> obtenerPorCallSid(@PathVariable String callSid) {
         return sesionService.obtenerPorCallSid(callSid)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     @PutMapping("/{callSid}")
     public ResponseEntity<Sesion> actualizar(@PathVariable String callSid,
                                               @RequestBody SesionDTO dto) {
