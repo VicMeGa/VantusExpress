@@ -46,28 +46,28 @@ export default function Clientes() {
   const [formEditar, setFormEditar] = useState({ nombre: "", telefono: "", direccion: "" });
   const [editando, setEditando] = useState(false);
 
-  // Reemplaza el useState de buscado y la función buscarPorTelefono
-  //const [buscado, setBuscado] = useState(false); // ya no necesitas esto
-
-  // Carga todos al entrar
   useEffect(() => { cargarTodos(); }, []);
 
   async function cargarTodos() {
     setLoading(true); setError(null);
     try {
       const res = await fetch(`${API}/clientes`);
-      if (!res.ok) throw new Error("Error al cargar clientes");
-      setClientes(await res.json());
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al cargar clientes");
+      if (!json.success) throw new Error(json.message);
+      setClientes(json.data);
     } catch (e) { setError(e.message); }
     finally { setLoading(false); }
   }
 
   async function buscarPorTelefono() {
-    if (!telefono.trim()) return cargarTodos();  // si limpia, regresa a todos
+    if (!telefono.trim()) return cargarTodos();  
     setBuscando(true); setError(null);
     try {
       const res = await fetch(`${API}/clientes?telefono=${telefono.trim()}`);
-      if (!res.ok) throw new Error("Error al buscar");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al buscar");
+      if (!json.success) throw new  Error(json.message);
       setClientes(await res.json());
     } catch (e) { setError(e.message); }
     finally { setBuscando(false); }
@@ -85,10 +85,13 @@ export default function Clientes() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formCrear),
       });
-      if (!res.ok) throw new Error("Error al crear cliente");
+      //if (!res.ok) throw new Error("Error al crear cliente");
+      const json = await res.json();
+      if (!json.success) throw new Error (json.message);
       setModalCrear(false);
       setFormCrear({ nombre: "", telefono: "", direccion: "" });
       if (buscado && telefono) buscarPorTelefono();
+      else cargarTodos();
     } catch (e) { setFormError(e.message); }
     finally { setCreando(false); }
   }
@@ -101,9 +104,12 @@ export default function Clientes() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formEditar),
       });
-      if (!res.ok) throw new Error("Error al actualizar");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al actualizar");
+      if (!json.success) throw new Error(json.mesage);
       setModalEditar(null);
       if (buscado && telefono) buscarPorTelefono();
+      else cargarTodos();
     } catch (e) { alert(e.message); }
     finally { setEditando(false); }
   }

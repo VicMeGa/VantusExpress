@@ -93,9 +93,11 @@ export default function BitacoraLlamadas() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, duracion: form.duracion ? Number(form.duracion) : null }),
       });
-      if (!res.ok) throw new Error("Error al registrar llamada");
-      const nueva = await res.json();
-      setRegistros(prev => [nueva, ...prev]);
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al registrar llamada");
+      if (!json.success) throw new Error (json.message);
+      //const nueva = await res.json();
+      setRegistros(prev => [json.data, ...prev]);
       setModalRegistrar(false);
       setForm({ callSid: "", telefono: "", duracion: "", resultado: "completado" });
     } catch (e) { setFormError(e.message); }

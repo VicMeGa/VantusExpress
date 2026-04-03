@@ -40,8 +40,9 @@ export default function Envios() {
     setLoading(true); setError(null);
     try {
       const res = await fetch(`${API}/envios`);
-      if (!res.ok) throw new Error("Error al cargar envíos");
-      setEnvios(await res.json());
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      setEnvios(json.data);
     } catch (e) { setError(e.message); }
     finally { setLoading(false); }
   }
@@ -51,10 +52,11 @@ export default function Envios() {
     setBuscando(true); setError(null);
     try {
       const res = await fetch(`${API}/envios?folio=${busqueda.trim()}`);
-      if (res.status === 404) { setEnvios([]); return; }
-      if (!res.ok) throw new Error("Error en búsqueda");
-      const data = await res.json();
-      setEnvios(Array.isArray(data) ? data : [data]);
+      const json = await res.json();
+      if (!json.succes) throw new Error(json.message);
+      //const data = await res.json();
+      //setEnvios(Array.isArray(data) ? data : [data]);
+      setEnvios(json.data);
     } catch (e) { setError(e.message); }
     finally { setBuscando(false); }
   }
@@ -74,7 +76,9 @@ export default function Envios() {
           body: JSON.stringify({ contenido: formCrear.contenido, valorEstimado: formCrear.valorEstimado || 0 }),
         }
       );
-      if (!res.ok) throw new Error("Error al crear envío");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al crear envío");
+      if (!json.succes) throw new Error(json.message);
       setModalCrear(false);
       setFormCrear({ clienteId: "", destinatarioId: "", contenido: "", valorEstimado: "" });
       cargarTodos();
@@ -90,7 +94,9 @@ export default function Envios() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formEditar),
       });
-      if (!res.ok) throw new Error("Error al actualizar");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al actualizar");
+      if (!json.success) throw new Error(json.message);
       setModalEditar(null);
       cargarTodos();
     } catch (e) { alert(e.message); }

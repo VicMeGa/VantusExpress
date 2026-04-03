@@ -27,7 +27,7 @@ function Field({ label, children }) {
 
 export default function Destinatarios() {
   const [destinatarios, setDestinatarios] = useState([]);
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const [clienteId, setClienteId] = useState("");
@@ -50,7 +50,9 @@ export default function Destinatarios() {
     setBuscando(true); setError(null);
     try {
       const res = await fetch(`${API}/destinatarios?clienteId=${clienteId.trim()}`);
-      if (!res.ok) throw new Error("Error al buscar destinatarios");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al buscar destinatarios");
+      if (!json.success) throw new Error(json.message);
       setDestinatarios(await res.json());
       setBuscado(true);
     } catch (e) { setError(e.message); }
@@ -69,7 +71,9 @@ export default function Destinatarios() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre: formCrear.nombre, telefono: formCrear.telefono, direccion: formCrear.direccion }),
       });
-      if (!res.ok) throw new Error("Error al crear destinatario");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al crear destinatario");
+      if (!json.success) throw new Error(json.message);
       setModalCrear(false);
       setFormCrear({ clienteId: "", nombre: "", telefono: "", direccion: "" });
       if (buscado && clienteId) buscarPorCliente();
@@ -85,7 +89,9 @@ export default function Destinatarios() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formEditar),
       });
-      if (!res.ok) throw new Error("Error al actualizar");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al actualizar");
+      if (!json.success) throw new Error(json.message);
       setModalEditar(null);
       if (buscado && clienteId) buscarPorCliente();
     } catch (e) { alert(e.message); }

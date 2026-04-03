@@ -22,12 +22,14 @@ function Login({ onSwitch }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Credenciales incorrectas");
-      }
-      const usuario = await res.json();
-      sessionStorage.setItem("usuario", JSON.stringify(usuario));
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      //if (!res.ok) {
+      //  const data = await res.json();
+      //  throw new Error(data.error || "Credenciales incorrectas");
+      //}
+      //const usuario = await res.json();
+      sessionStorage.setItem("usuario", JSON.stringify(json.data));
       navigate("/envios");
     } catch (e) { setError(e.message); }
     finally { setLoading(false); }

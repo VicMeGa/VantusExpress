@@ -27,10 +27,12 @@ function Registro({ onSwitch }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre: form.nombre, email: form.email, password: form.password }),
       });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Error al registrar");
-      }
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      //if (!res.ok) {
+      //  const data = await res.json();
+      //  throw new Error(data.error || "Error al registrar");
+      //}
       setExito(true);
     } catch (e) { setError(e.message); }
     finally { setLoading(false); }

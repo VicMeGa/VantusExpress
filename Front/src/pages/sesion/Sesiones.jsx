@@ -51,8 +51,10 @@ export default function Sesiones() {
     setLoading(true); setError(null);
     try {
       const res = await fetch(`${API}/sesion`);
-      if (!res.ok) throw new Error("Error al cargar sesiones");
-      setSesiones(await res.json());
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al cargar sesiones");
+      if (!json.success) throw new Error(json.message);
+      setSesiones(json.data);
     } catch (e) { setError(e.message); }
     finally { setLoading(false); }
   }
@@ -62,10 +64,12 @@ export default function Sesiones() {
     setBuscando(true); setError(null);
     try {
       const res = await fetch(`${API}/sesion/${busqueda.trim()}`);
-      if (res.status === 404) { setSesiones([]); return; }
-      if (!res.ok) throw new Error("Error en búsqueda");
-      const data = await res.json();
-      setSesiones(Array.isArray(data) ? data : [data]);
+      const json = await res.json();
+      //if (res.status === 404) { setSesiones([]); return; }
+      //if (!res.ok) throw new Error("Error en búsqueda");
+      if (!json.success) {setSesiones([]); return; }
+      //const data = await res.json();
+      setSesiones(Array.isArray(json.data) ? json.data : [json.data]);
     } catch (e) { setError(e.message); }
     finally { setBuscando(false); }
   }
@@ -77,7 +81,7 @@ export default function Sesiones() {
     }
     let datosObj = {};
     if (formCrear.datos.trim()) {
-      try { datosObj = JSON.parse(formCrear.datos); }
+      try { JSON.parse(formCrear.datos); datosObj = formCrear.datos;}
       catch { setFormError("El campo Datos debe ser JSON válido."); return; }
     }
     setCreando(true);
@@ -87,7 +91,9 @@ export default function Sesiones() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ callSid: formCrear.callSid, pasoActual: formCrear.pasoActual, datos: datosObj }),
       });
-      if (!res.ok) throw new Error("Error al crear sesión");
+      const json= await res.json();
+      //if (!res.ok) throw new Error("Error al crear sesión");
+      if (!json.success) throw new Error(json.message);
       setModalCrear(false);
       setFormCrear({ callSid: "", pasoActual: "", datos: "" });
       cargarTodos();
@@ -96,9 +102,9 @@ export default function Sesiones() {
   }
 
   async function guardarEdicion() {
-    let datosObj = {};
+    let datosObj = "{}";
     if (formEditar.datos.trim()) {
-      try { datosObj = JSON.parse(formEditar.datos); }
+      try { JSON.parse(formEditar.datos); datosObj = formEditar.datos; }
       catch { alert("El campo Datos debe ser JSON válido."); return; }
     }
     setEditando(true);
@@ -108,7 +114,9 @@ export default function Sesiones() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pasoActual: formEditar.pasoActual, datos: datosObj }),
       });
-      if (!res.ok) throw new Error("Error al actualizar");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al actualizar");
+      if (!json.success) throw new Error (json.message);
       setModalEditar(null);
       cargarTodos();
     } catch (e) { alert(e.message); }
@@ -119,7 +127,9 @@ export default function Sesiones() {
     if (!confirm(`¿Eliminar sesión ${callSid}?`)) return;
     try {
       const res = await fetch(`${API}/sesion/${callSid}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Error al eliminar");
+      const json = await res.json();
+      //if (!res.ok) throw new Error("Error al eliminar");
+      if (!json.success) throw new Error(json.messafe);
       cargarTodos();
     } catch (e) { alert(e.message); }
   }
