@@ -13,10 +13,16 @@ import org.springframework.data.repository.query.Param;
 public interface DestinatarioRepository extends JpaRepository<Destinatario, Integer> {
     List<Destinatario> findByClienteId(Integer clienteId);
 
-    @Query("SELECT d FROM Destinatario d WHERE " +
-           "LOWER(d.nombre) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
-           "LOWER(d.telefono) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
-           "LOWER(d.direccion) LIKE LOWER(CONCAT('%', :q, '%'))")
+    //@Query("SELECT d FROM Destinatario d WHERE " +
+    //       "LOWER(d.nombre) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+    //       "LOWER(d.telefono) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+    //       "LOWER(d.direccion) LIKE LOWER(CONCAT('%', :q, '%'))")
+    //Page<Destinatario> buscar(@Param("q") String q, Pageable pageable);
+    @Query("SELECT d FROM Destinatario d JOIN d.cliente c WHERE " +
+       "LOWER(d.nombre) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+       "LOWER(d.telefono) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+       "LOWER(d.direccion) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+       "CAST(d.cliente.id AS string) LIKE CONCAT('%', :q, '%')")
     Page<Destinatario> buscar(@Param("q") String q, Pageable pageable);
 
     Page<Destinatario> findAll(Pageable pageable);

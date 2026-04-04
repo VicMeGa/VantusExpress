@@ -49,11 +49,11 @@ export default function Destinatarios() {
     if (!clienteId.trim()) return;
     setBuscando(true); setError(null);
     try {
-      const res = await fetch(`${API}/destinatarios?clienteId=${clienteId.trim()}`);
+      const res = await fetch(`${API}/destinatarios?q=${clienteId.trim()}`);
       const json = await res.json();
       //if (!res.ok) throw new Error("Error al buscar destinatarios");
       if (!json.success) throw new Error(json.message);
-      setDestinatarios(await res.json());
+      setDestinatarios(json.data);
       setBuscado(true);
     } catch (e) { setError(e.message); }
     finally { setBuscando(false); }
@@ -96,6 +96,15 @@ export default function Destinatarios() {
       if (buscado && clienteId) buscarPorCliente();
     } catch (e) { alert(e.message); }
     finally { setEditando(false); }
+  }
+  async function eliminar(id) {
+    if (!confirm(`¿Eliminar destinatario #${id}?`)) return;
+    try {
+      const res = await fetch(`${API}/destinatarios/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      if (buscado && clienteId) buscarPorCliente();
+    } catch (e) { alert(e.message); }
   }
 
   function abrirEditar(dest) {
@@ -150,7 +159,7 @@ export default function Destinatarios() {
             <div className="envios-search">
                 <input
                 className="field__input"
-                type="number"
+                type="text"
                 value={clienteId}
                 onChange={e => setClienteId(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && buscarPorCliente()}
@@ -191,6 +200,7 @@ export default function Destinatarios() {
                     <div className="envios-table__actions">
                         <button className="btn-icon" onClick={() => setModalDetalle(dest)} title="Ver detalle">👁</button>
                         <button className="btn-icon" onClick={() => abrirEditar(dest)} title="Editar">✏️</button>
+                        <button className="btn-icon" onClick={() => eliminar(dest.id)} title="Eliminar" style={{ color: "#ef4444" }}>🗑</button>
                     </div>
                     </div>
                 ))

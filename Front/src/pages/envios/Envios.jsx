@@ -51,9 +51,9 @@ export default function Envios() {
     if (!busqueda.trim()) return cargarTodos();
     setBuscando(true); setError(null);
     try {
-      const res = await fetch(`${API}/envios?folio=${busqueda.trim()}`);
+      const res = await fetch(`${API}/envios?q=${busqueda.trim()}`);
       const json = await res.json();
-      if (!json.succes) throw new Error(json.message);
+      if (!json.success) throw new Error(json.message);
       //const data = await res.json();
       //setEnvios(Array.isArray(data) ? data : [data]);
       setEnvios(json.data);

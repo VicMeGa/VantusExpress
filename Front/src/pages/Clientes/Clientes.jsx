@@ -64,11 +64,11 @@ export default function Clientes() {
     if (!telefono.trim()) return cargarTodos();  
     setBuscando(true); setError(null);
     try {
-      const res = await fetch(`${API}/clientes?telefono=${telefono.trim()}`);
+      const res = await fetch(`${API}/clientes?q=${telefono.trim()}`);
       const json = await res.json();
       //if (!res.ok) throw new Error("Error al buscar");
       if (!json.success) throw new  Error(json.message);
-      setClientes(await res.json());
+      setClientes(json.data);
     } catch (e) { setError(e.message); }
     finally { setBuscando(false); }
   }
@@ -112,6 +112,16 @@ export default function Clientes() {
       else cargarTodos();
     } catch (e) { alert(e.message); }
     finally { setEditando(false); }
+  }
+
+  async function eliminar(id) {
+    if (!confirm(`¿Eliminar cliente #${id}?`)) return;
+    try {
+      const res = await fetch(`${API}/clientes/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      cargarTodos();
+    } catch (e) { alert(e.message); }
   }
 
   function abrirEditar(cliente) {
@@ -206,6 +216,7 @@ export default function Clientes() {
                 <div className="envios-table__actions">
                   <button className="btn-icon" onClick={() => setModalDetalle(cliente)} title="Ver detalle">👁</button>
                   <button className="btn-icon" onClick={() => abrirEditar(cliente)} title="Editar">✏️</button>
+                  <button className="btn-icon" onClick={() => eliminar(cliente.id)} title="Eliminar" style={{ color: "#ef4444" }}>🗑</button>
                 </div>
               </div>
             ))
