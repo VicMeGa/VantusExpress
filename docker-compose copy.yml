@@ -1,8 +1,8 @@
 
 services:
 
-  mysql:
-    image: mysql:8.0
+  mariadb:
+    image: mariadb:11.4
     container_name: vantus-db
     restart: always
     environment:
@@ -22,11 +22,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/express
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/express
       SPRING_DATASOURCE_USERNAME: admon
       SPRING_DATASOURCE_PASSWORD: paimon
     depends_on:
-      - mysql
+      - mariadb
 
   frontend:
     build: ./Front
